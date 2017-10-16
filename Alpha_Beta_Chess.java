@@ -20,6 +20,7 @@ public class Alpha_Beta_Chess {
               K = white king
             */
 
+            //can manipulate these values to test possible positions
             {"r","n","b","q","k","b","n","r"},
             {"p","p","p","p","p","p","p","p"},
             {" "," "," "," "," "," "," "," "},
@@ -124,7 +125,7 @@ public class Alpha_Beta_Chess {
         int r = i / 8, c = i % 8;
 
         //King can move in 8 directions, possible positions are 0-9
-        for (int j=0; j<9; j++){
+        for (int j=0; j<9; j++) {
 
             /*
             0  1  2
@@ -134,35 +135,36 @@ public class Alpha_Beta_Chess {
 
             //0,1,2,3 are different directions, 4 being the space the King is currently in
 
-            if(j != 4){
-                try{
-                //Context: King can't move to spaces with allied pieces.
+            if (j != 4) {
+                try {
+                    //Context: King can't move to spaces with allied pieces.
 
-                //checking to see if space we're moving to has a piece is that's lowercase (White King can capture black piece)
-                //OR if the space we're moving to is an empty space
-                if(Character.isLowerCase(chessBoard[r-1 + j/3][c-1+j%3].charAt(0)) || " ".equals(chessBoard[r-1 + j/3][c-1+j%3]){
+                    //checking to see if space we're moving to has a piece is that's lowercase (White King can capture black piece)
+                    //OR if the space we're moving to is an empty space
+                    if (Character.isLowerCase(chessBoard[r - 1 + j / 3][c - 1 + j % 3].charAt(0)) || " ".equals(chessBoard[r - 1 + j / 3][c - 1 + j % 3])) {
 
-                    oldPiece = chessBoard[r-1 + j/3][c-1+j%3];
+                        oldPiece = chessBoard[r - 1 + j / 3][c - 1 + j % 3];
 
-                    //King's previous position empty
-                    chessBoard[r][c] = " ";
+                        //King's previous position empty
+                        chessBoard[r][c] = " ";
 
-                    //King's new position has been recorded.
-                    chessBoard[r-1 + j/3][c-1+j%3] = "K";
+                        //King's new position has been recorded.
+                        chessBoard[r - 1 + j / 3][c - 1 + j % 3] = "K";
 
-                    int kingTemp = kingPositionC;
+                        int kingTemp = kingPositionC;
 
-                    //updates new King's column position
-                    kingTemp= i+(j/3)*8+j%3-9;
+                        //updates new King's column position
+                        kingPositionC = i + (j / 3) * 8 + j % 3 - 9;
 
-                    if(kingSafe()){
-                        list = list+r+c+(r-1+j/3)+(c-1+j%3) + oldPiece;
+                        if (kingSafe()) {
+                            list = list + r + c + (r - 1 + j / 3) + (c - 1 + j % 3) + oldPiece;
+                        }
+                        chessBoard[r][c] = "K";
+                        chessBoard[r - 1 + j / 3][c - 1 + j % 3] = oldPiece;
+                        kingPositionC = kingTemp;
                     }
-                    chessBoard[r][c] = "K";
-                    chessBoard[r-1+j/3][c-1+j%3] = oldPiece;
-                    kingPositionC = kingTemp;
-                }
-            } catch (Exception e){}
+                } catch (Exception e) {}
+            }
         }
         //need to add castling later.
 
