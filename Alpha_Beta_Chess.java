@@ -11,7 +11,6 @@ public class Alpha_Beta_Chess {
               b = black bishop
               q = black queen
               k = black king
-
               P = white pawn
               R = white rook
               N = white night
@@ -25,8 +24,8 @@ public class Alpha_Beta_Chess {
             {"p","p","p","p","p","p","p","p"},
             {" "," "," "," "," "," "," "," "},
             {" "," "," "," "," "," "," "," "},
-            {" "," "," ","Q"," "," "," "," "},
             {" "," "," "," "," "," "," "," "},
+            {"R","P"," "," "," "," "," "," "},
             {"P","P","P","P","P","P","P","P"},
             {"R","N","B","Q","K","B","N","R"}};
 
@@ -73,13 +72,10 @@ public class Alpha_Beta_Chess {
     /*
         //What are possible moves?
         //check for possible moves with each Piece type
-
             //check to see if a coordinate has a value in it.
-
               //if coordinate is empty, check to see if it's a legal move for the specific Piece
                      // if legal, then bool possibleMove = true
                     // if possibleMove == true, then move piece to space.
-
               // if coordinate has a piece in it, check to see if this.Piece can move in that direction
                     //if yes, possible move bool = true
                     //if possibleMoveBool == true, and canMoveThatWay == true, call capturePiece method
@@ -93,21 +89,165 @@ public class Alpha_Beta_Chess {
         String list = "";
         return list;
     }
-    //possible moves for White Rook
+    //possible moves for White Rook (could be similar to Bishop, but taking different approach)
     public static String possibleR(int i){
-        String list = "";
+        String list = "", oldPiece;
+        int r = i/8, c = i%8;
+        int temp = 1;
+        for (int j=-1; j<=1; j+=2) {
+
+            //checks a vertical line (column)
+            try{
+                while(" ".equals(chessBoard[r][c+temp*j])){
+                    //memorize old location
+                    oldPiece = chessBoard[r][c+temp*j];
+
+                    //move from current location
+                    chessBoard[r][c] = " ";
+
+                    //set old location as Rook
+                    chessBoard[r][c+temp*j] = "R";
+
+                    if (kingSafe()) {
+                        list = list+ r + c + (r+temp*j) + c + oldPiece;
+                    }
+
+                    //move to new location as Rook
+                    chessBoard[r][c] = "R";
+                    chessBoard[r][c+temp*j] = oldPiece;
+                    temp++;
+                }
+
+                //if the enemy space is at the new position,
+                if(Character.isLowerCase(chessBoard[r][c+temp*j].charAt(0))){
+                    oldPiece = chessBoard[r][c+temp*j];
+
+                    //move from current location
+                    chessBoard[r][c] = " ";
+
+                    //set old location as Rook
+                    chessBoard[r + temp * j][c] = "R";
+
+                    if (kingSafe()) {
+                        list = list+ r + c + (r+temp*j) + c + oldPiece;
+                    }
+
+                    //move to new location as Rook
+                    chessBoard[r][c] = "R";
+                    chessBoard[r][c+temp*j] = oldPiece;
+                }
+
+            } catch(Exception e){}
+            //reset temp to 1
+              temp = 1;
+            //checks a horizontal line
+            try {
+                while (" ".equals(chessBoard[r + temp * j][c])) {
+                    //memorize old location
+                    oldPiece = chessBoard[r + temp * j][c];
+
+                    //move from current location
+                    chessBoard[r][c] = " ";
+
+                    //set old location as Rook
+                    chessBoard[r + temp * j][c] = "R";
+
+                    if (kingSafe()) {
+                        list = list + r + c + (r+temp*j) + c + oldPiece;
+                    }
+
+                    //move to new location as Rook
+                    chessBoard[r][c] = "R";
+                    chessBoard[r + temp * j][c] = oldPiece;
+                    temp++;
+                }
+
+                //if the enemy space is at the new position,
+                if (Character.isLowerCase(chessBoard[r + temp * j][c].charAt(0))) {
+                    oldPiece = chessBoard[r + temp * j][c];
+
+                    //move from current location
+                    chessBoard[r][c] = " ";
+
+                    //set old location as Rook
+                    chessBoard[r + temp * j][c] = "R";
+
+                    if (kingSafe()) {
+                        list = list + r + c + (r+temp*j) + c + oldPiece;
+                    }
+
+                    //move to new location as Rook
+                    chessBoard[r][c] = "R";
+                    chessBoard[r + temp * j][c] = oldPiece;
+                }
+            } catch (Exception e){}
+            temp = 1;
+        }
         return list;
     }
-
     //possible moves for White Knight
     public static String possibleN(int i){
         String list = "";
         return list;
     }
 
-    //possible moves for White Bishop
+    //possible moves for White Bishop (similar to Queen)
     public static String possibleB(int i){
-        String list = "";
+        String list = "", oldPiece;
+        int r = i/8, c = i%8;
+        int temp = 1;
+
+        //allows for horizontal and vertical movement in 4 directions
+        // moves along x axis (-1 = left, +1 = right)
+        for (int j=-1; j<=1; j+=2){
+            //moves along y axis (-1 = down, +1 = up)
+            for (int k=-1; k<=1; k+=2){
+                try{
+                    //while there's an empty space,
+                    //[move queen by row + temp (starts at 1) * x direction (j)]
+                    //[move queen by column + temp (starts at 1) * y direction (k)]
+                    while(" ".equals(chessBoard[r+temp*j][c+temp*k])){
+
+                        //take previous position
+                        oldPiece = chessBoard[r+temp*j][c+temp*k];
+
+                        //establish current move's position as a blank space
+                        chessBoard[r][c] = " ";
+
+                        //establishes Queen's position where the oldPiece was
+                        chessBoard[r+temp*j][c+temp*k] = "B";
+
+                        if (kingSafe()) {
+                            list = list+ r + c + (r+temp*j) + (c+temp*k) + oldPiece;
+                        }
+
+                        //moves Queen to the previous blank space (made a move to the new location)
+                        chessBoard[r][c] = "B";
+
+                        //establishes oldPiece as the previous location the Queen was at
+                        oldPiece = chessBoard[r+temp*j][c+temp*k] = oldPiece;
+
+                        //increment temp's value by 1 every time until there's no empty spaces left
+                        temp++;
+                    }
+
+                    //if chess space is not blank, and is lowercase (black piece)
+                    if(Character.isLowerCase(chessBoard[r + temp * j][c + temp * k].charAt(0))){
+                        oldPiece = chessBoard[r+temp*j][c+temp*k];
+                        chessBoard[r][c] = " ";
+                        chessBoard[r+temp*j][c+temp*k] = "B";
+                        if (kingSafe()) {
+                            list = list + r + c + (r + temp *j) + (c + temp * k) + oldPiece;
+                        }
+
+                        chessBoard[r][c] = "B";
+                        oldPiece = chessBoard[r+temp*j][c+temp*k] = oldPiece;
+                    }
+                } catch (Exception e) {}
+                //after directions from Queen are checked, temp is set back to 1 (1 space away from the Queen)
+                temp = 1;
+            }
+        }
         return list;
     }
 
@@ -122,51 +262,54 @@ public class Alpha_Beta_Chess {
         for (int j=-1; j<=1; j++){
             //moves along y axis (-1 = down, +1 = up)
             for (int k=-1; k<=1; k++){
-                try{
-                    //while there's an empty space,
-                         //[move queen by row + temp (starts at 1) * x direction (j)]
-                         //[move queen by column + temp (starts at 1) * y direction (k)]
-                    while(" ".equals(chessBoard[r+temp*j][c+temp*k])){
+                //eliminates unnecessary check, because no point in checking when 0,0 for Queen
+                if(j!=0 || k!=0) {
+                    try {
+                        //while there's an empty space,
+                        //[move queen by row + temp (starts at 1) * x direction (j)]
+                        //[move queen by column + temp (starts at 1) * y direction (k)]
+                        while (" ".equals(chessBoard[r + temp * j][c + temp * k])) {
 
-                        //take previous position
-                        oldPiece = chessBoard[r+temp*j][c+temp*k];
+                            //take previous position
+                            oldPiece = chessBoard[r + temp * j][c + temp * k];
 
-                        //establish current move's position as a blank space
-                        chessBoard[r][c] = " ";
+                            //establish current move's position as a blank space
+                            chessBoard[r][c] = " ";
 
-                        //establishes Queen's position where the oldPiece was
-                        chessBoard[r+temp*j][c+temp*k] = "Q";
+                            //establishes Queen's position where the oldPiece was
+                            chessBoard[r + temp * j][c + temp * k] = "Q";
 
-                        if (kingSafe()) {
-                            list = list+ r + c + (r+temp*j) + (c+temp*k) + oldPiece;
+                            if (kingSafe()) {
+                                list = list + r + c + (r + temp * j) + (c + temp * k) + oldPiece;
+                            }
+
+                            //moves Queen to the previous blank space (made a move to the new location)
+                            chessBoard[r][c] = "Q";
+
+                            //establishes oldPiece as the previous location the Queen was at
+                            oldPiece = chessBoard[r + temp * j][c + temp * k] = oldPiece;
+
+                            //increment temp's value by 1 every time until there's no empty spaces left
+                            temp++;
                         }
 
-                        //moves Queen to the previous blank space (made a move to the new location)
-                        chessBoard[r][c] = "Q";
+                        //if chess space is not blank, and is lowercase (black piece)
+                        if (Character.isLowerCase(chessBoard[r + temp * j][c + temp * k].charAt(0))) {
+                            oldPiece = chessBoard[r + temp * j][c + temp * k];
+                            chessBoard[r][c] = " ";
+                            chessBoard[r + temp * j][c + temp * k] = "Q";
 
-                        //establishes oldPiece as the previous location the Queen was at
-                        oldPiece = chessBoard[r+temp*j][c+temp*k] = oldPiece;
+                            if (kingSafe()) {
+                                list = list + r + c + (r + temp * j) + (c + temp * k) + oldPiece;
+                            }
 
-                        //increment temp's value by 1 every time until there's no empty spaces left
-                        temp++;
-                    }
-
-                    //if chess space is not blank, and is lowercase (black piece)
-                    if(Character.isLowerCase(chessBoard[r + temp * j][c + temp * k].charAt(0))){
-                        oldPiece = chessBoard[r+temp*j][c+temp*k];
-                        chessBoard[r][c] = " ";
-                        chessBoard[r+temp*j][c+temp*k] = "Q";
-
-                        if (kingSafe()) {
-                            list = list + r + c + (r + temp *j) + (c + temp * k) + oldPiece;
+                            chessBoard[r][c] = "Q";
+                            oldPiece = chessBoard[r + temp * j][c + temp * k] = oldPiece;
                         }
-
-                        chessBoard[r][c] = "Q";
-                        oldPiece = chessBoard[r+temp*j][c+temp*k] = oldPiece;
-                    }
-                } catch (Exception e) {}
-                  //after directions from Queen are checked, temp is set back to 1 (1 space away from the Queen)
-                  temp = 1;
+                    } catch (Exception e) {}
+                    //after directions from Queen are checked, temp is set back to 1 (1 space away from the Queen)
+                    temp = 1;
+                }
             }
         }
         return list;
@@ -232,6 +375,6 @@ public class Alpha_Beta_Chess {
 }
 
 
-// https://www.youtube.com/watch?v=kWLO7HG9M_I&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl&index=11
-// Bishop & Rook Movement - Java Chess Engine Tutorial 10
+// https://www.youtube.com/watch?v=cZOdExE1NaU&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl&index=12
+// Knight Movement - Java Chess Engine Tutorial 11 @ 2:15
 // Logic Crazy Chess
