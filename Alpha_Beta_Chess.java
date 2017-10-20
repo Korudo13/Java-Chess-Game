@@ -25,7 +25,7 @@ public class Alpha_Beta_Chess {
             {" "," "," "," "," "," "," "," "},
             {" "," "," "," "," "," "," "," "},
             {" "," "," "," "," "," "," "," "},
-            {"R","P"," "," "," "," "," "," "},
+            {"R"," "," "," "," "," "," "," "},
             {"P","P","P","P","P","P","P","P"},
             {"R","N","B","Q","K","B","N","R"}};
 
@@ -187,7 +187,24 @@ public class Alpha_Beta_Chess {
     }
     //possible moves for White Knight
     public static String possibleN(int i){
-        String list = "";
+        String list = "", oldPiece;
+        int r = i/8, c = i%8;
+        for (int j =-1; j <=1; j+=2){
+            for(int k=-1; k<=1; k+=2){
+                try{
+                    if(Character.isLowerCase(chessBoard[r+j][c+k*2].charAt(0)) || " ".equals(chessBoard[r+j][c+k*2])){
+                        oldPiece = chessBoard[r+j][c+k*2];
+                        chessBoard[r][c] = " ";
+                        chessBoard[r+j][c+k*2] = "N";
+                        if(kingSafe()){
+                            list = list + r + c + (r+j) + (c+k*2) + oldPiece;
+                        }
+                        chessBoard[r][c] = "N";
+                        chessBoard[r+j][c+k*2] = oldPiece;
+                    }
+                } catch(Exception e){}
+            }
+        }
         return list;
     }
 
@@ -376,5 +393,5 @@ public class Alpha_Beta_Chess {
 
 
 // https://www.youtube.com/watch?v=cZOdExE1NaU&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl&index=12
-// Knight Movement - Java Chess Engine Tutorial 11 @ 2:15
+// Knight Movement - Java Chess Engine Tutorial 11 @ 12:15
 // Logic Crazy Chess
