@@ -25,7 +25,7 @@ public class Alpha_Beta_Chess {
             {" "," "," "," "," "," "," "," "},
             {" "," "," "," "," "," "," "," "},
             {" "," "," "," "," "," "," "," "},
-            {"R"," "," "," "," "," "," "," "},
+            {" "," "," "," "," "," "," "," "},
             {"P","P","P","P","P","P","P","P"},
             {"R","N","B","Q","K","B","N","R"}};
 
@@ -195,12 +195,23 @@ public class Alpha_Beta_Chess {
                     if(Character.isLowerCase(chessBoard[r+j][c+k*2].charAt(0)) || " ".equals(chessBoard[r+j][c+k*2])){
                         oldPiece = chessBoard[r+j][c+k*2];
                         chessBoard[r][c] = " ";
-                        chessBoard[r+j][c+k*2] = "N";
                         if(kingSafe()){
                             list = list + r + c + (r+j) + (c+k*2) + oldPiece;
                         }
                         chessBoard[r][c] = "N";
                         chessBoard[r+j][c+k*2] = oldPiece;
+                    }
+                } catch(Exception e){}
+
+                try{
+                    if(Character.isLowerCase(chessBoard[r+j*2][c+k].charAt(0)) || " ".equals(chessBoard[r+j*2][c+k])){
+                        oldPiece = chessBoard[r+j*2][c+k];
+                        chessBoard[r][c] = " ";
+                        if(kingSafe()){
+                            list = list + r + c + (r+j*2) + (c+k) + oldPiece;
+                        }
+                        chessBoard[r][c] = "N";
+                        chessBoard[r+j*2][c+k] = oldPiece;
                     }
                 } catch(Exception e){}
             }
@@ -386,12 +397,40 @@ public class Alpha_Beta_Chess {
         return list;
     }
 
+    //checks to see if my King is safe against specific enemy piece types
     public static boolean kingSafe(){
+        //enemy bishop or queen
+            //modified from bishop checks
+        int temp = 1;
+        for (int i=-1; i<=1; i+=2){
+            //moves along y axis (-1 = down, +1 = up)
+            for (int j=-1; j<=1; j+=2){
+                try{
+                    //moves in a diagonal path. If empty space, keep going.
+                    while(" ".equals(chessBoard[kingPositionC/8+temp*i][kingPositionC%8+temp*j])){temp++;}
+                    //if enemy bishop in space
+                    if("b".equals(chessBoard[kingPositionC/8+temp*i][kingPositionC%8+temp*j])) || {
+                        //danger
+                    }
+                    {
+
+                        oldPiece = chessBoard[r+temp*j][c+temp*k];
+                        chessBoard[r][c] = " ";
+                        chessBoard[r+temp*j][c+temp*k] = "B";
+                        if(kingSafe()){
+                            list = list+r+c+(r+temp*j)+(c+temp*k)+oldPiece;
+                        }
+                        chessBoard[r][c] = "B";
+                        chessBoard[r+temp+*j][c+temp*k] = oldPiece;
+                        temp++;
+                    }
+                } catch (Exception e) {}
+                temp = 1;
         return true;
     }
 }
 
 
-// https://www.youtube.com/watch?v=cZOdExE1NaU&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl&index=12
-// Knight Movement - Java Chess Engine Tutorial 11 @ 12:15
+// https://www.youtube.com/watch?v=P-qGwTNBwdQ&index=13&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
+// King Safety (Part 1) - Java Chess Engine Tutorial 12 @ 8:20
 // Logic Crazy Chess
