@@ -399,38 +399,55 @@ public class Alpha_Beta_Chess {
 
     //checks to see if my King is safe against specific enemy piece types
     public static boolean kingSafe(){
-        //enemy bishop or queen
+        //enemy bishop / queen
             //modified from bishop checks
         int temp = 1;
-        for (int i=-1; i<=1; i+=2){
+        for (int i=-1; i<=1; i+=2) {
             //moves along y axis (-1 = down, +1 = up)
-            for (int j=-1; j<=1; j+=2){
-                try{
+            for (int j = -1; j <= 1; j += 2) {
+                try {
                     //moves in a diagonal path. If empty space, keep going.
-                    while(" ".equals(chessBoard[kingPositionC/8+temp*i][kingPositionC%8+temp*j])){temp++;}
-                    //if enemy bishop in space
-                    if("b".equals(chessBoard[kingPositionC/8+temp*i][kingPositionC%8+temp*j])) || {
-                        //danger
-                    }
-                    {
-
-                        oldPiece = chessBoard[r+temp*j][c+temp*k];
-                        chessBoard[r][c] = " ";
-                        chessBoard[r+temp*j][c+temp*k] = "B";
-                        if(kingSafe()){
-                            list = list+r+c+(r+temp*j)+(c+temp*k)+oldPiece;
-                        }
-                        chessBoard[r][c] = "B";
-                        chessBoard[r+temp+*j][c+temp*k] = oldPiece;
+                    while (" ".equals(chessBoard[kingPositionC / 8 + temp * i][kingPositionC % 8 + temp * j])) {
                         temp++;
+                    }
+                    //if enemy bishop in space
+                    if ("b".equals(chessBoard[kingPositionC / 8 + temp * i][kingPositionC % 8 + temp * j]) ||
+                        "q".equals(chessBoard[kingPositionC / 8 + temp * i][kingPositionC % 8 + temp * j])){
+                        return false;
                     }
                 } catch (Exception e) {}
                 temp = 1;
+            }
+        }
+
+        //enemy rook / queen
+        for (int i=-1; i<=1; i+=2) {
+            try {
+                while (" ".equals(chessBoard[kingPositionC / 8][kingPositionC % 8 + temp * i])) {
+                    temp++;
+                }
+                if ("r".equals(chessBoard[kingPositionC / 8][kingPositionC % 8 + temp * i]) ||
+                        "q".equals(chessBoard[kingPositionC / 8][kingPositionC % 8 + temp * i])) {
+                    return false;
+                }
+            } catch (Exception e) {}
+            temp = 1;
+            try {
+                while (" ".equals(chessBoard[kingPositionC / 8 + temp * i][kingPositionC % 8])) {
+                    temp++;
+                }
+                if ("r".equals(chessBoard[kingPositionC / 8 + temp * i][kingPositionC % 8]) ||
+                        "q".equals(chessBoard[kingPositionC / 8 + temp * i][kingPositionC % 8])) {
+                    return false;
+                }
+            } catch (Exception e) {}
+            temp = 1;
+        }
         return true;
     }
 }
 
 
-// https://www.youtube.com/watch?v=P-qGwTNBwdQ&index=13&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
-// King Safety (Part 1) - Java Chess Engine Tutorial 12 @ 8:20
+// https://www.youtube.com/watch?v=d_K0Jjy9BXM&index=14&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
+// King Safety (Part 2) - Java Chess Engine Tutorial 13
 // Logic Crazy Chess
