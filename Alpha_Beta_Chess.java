@@ -36,14 +36,14 @@ public class Alpha_Beta_Chess {
     public static void main(String[] args){
         while(!"K".equals(chessBoard[kingPositionC/8][kingPositionC%8])){kingPositionC++;} //get my King's location
         while(!"k".equals(chessBoard[kingPositionL/8][kingPositionL%8])){kingPositionL++;} //get enemy King's location
-        
+
        /* JFrame f = new JFrame("Prepare For Awesome Chess!");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //terminates program when user clicks red "X" on window
         UserInterface ui = new UserInterface(); //calls UserInterface
         f.add(ui); // adds the UserInterface and adds it to the window
         f.setSize(500, 500); //window size
         f.setVisible(true);*/
-        
+
         System.out.println(possibleMoves());
     }
 
@@ -143,7 +143,7 @@ public class Alpha_Beta_Chess {
 
             } catch(Exception e){}
             //reset temp to 1
-              temp = 1;
+            temp = 1;
             //checks a horizontal line
             try {
                 while (" ".equals(chessBoard[r + temp * j][c])) {
@@ -404,7 +404,7 @@ public class Alpha_Beta_Chess {
     //checks to see if my King is safe against specific enemy piece types
     public static boolean kingSafe(){
         //enemy bishop / queen
-            //modified from bishop checks
+        //modified from bishop checks
         int temp = 1;
         for (int i=-1; i<=1; i+=2) {
             //moves along y axis (-1 = down, +1 = up)
@@ -416,7 +416,7 @@ public class Alpha_Beta_Chess {
                     }
                     //if enemy bishop in space
                     if ("b".equals(chessBoard[kingPositionC / 8 + temp * i][kingPositionC % 8 + temp * j]) ||
-                        "q".equals(chessBoard[kingPositionC / 8 + temp * i][kingPositionC % 8 + temp * j])){
+                            "q".equals(chessBoard[kingPositionC / 8 + temp * i][kingPositionC % 8 + temp * j])){
                         return false;
                     }
                 } catch (Exception e) {}
@@ -447,11 +447,29 @@ public class Alpha_Beta_Chess {
             } catch (Exception e) {}
             temp = 1;
         }
+        //knight
+        for(int i=-1; i<=1; i+=2){
+            for(int j=-1; j<=1; j+=2){
+                try{
+                    //checks if Knight in position 1 row, 2 columns away
+                    if("n".equals(chessBoard[kingPositionC/8+i][kingPositionC%8+j*2])){
+                        return false;
+                    }
+                } catch (Exception e){}
+                try{
+                    //checks if Knight in position 2 rows, 1 column away
+                    if ("n".equals(chessBoard[kingPositionC/8+i*2][kingPositionC%8+j])){
+                            return false;
+                        }
+                    } catch (Exception e){}
+                }
+            }
+
         return true;
     }
 }
 
 
 // https://www.youtube.com/watch?v=d_K0Jjy9BXM&index=14&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
-// King Safety (Part 2) - Java Chess Engine Tutorial 13
+// King Safety (Part 2) - Java Chess Engine Tutorial 13 @ 4:44
 // Logic Crazy Chess
