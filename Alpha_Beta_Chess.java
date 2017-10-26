@@ -34,12 +34,16 @@ public class Alpha_Beta_Chess {
     static int kingPositionC, kingPositionL;
 
     public static void main(String[] args){
+        while(!"K".equals(chessBoard[kingPositionC/8][kingPositionC%8])){kingPositionC++;} //get my King's location
+        while(!"k".equals(chessBoard[kingPositionL/8][kingPositionL%8])){kingPositionL++;} //get enemy King's location
+        
        /* JFrame f = new JFrame("Prepare For Awesome Chess!");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //terminates program when user clicks red "X" on window
         UserInterface ui = new UserInterface(); //calls UserInterface
         f.add(ui); // adds the UserInterface and adds it to the window
         f.setSize(500, 500); //window size
         f.setVisible(true);*/
+        
         System.out.println(possibleMoves());
     }
 
