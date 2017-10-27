@@ -23,11 +23,11 @@ public class Alpha_Beta_Chess {
             {"r","n","b","q","k","b","n","r"},
             {"p","p","p","p","p","p","p","p"},
             {" "," "," "," "," "," "," "," "},
+            {" "," "," "," "," "," ","b"," "},
             {" "," "," "," "," "," "," "," "},
-            {" "," "," "," "," "," "," "," "},
-            {" "," "," "," "," "," "," "," "},
+            {" "," "," "," ","K"," "," "," "},
             {"P","P","P","P","P","P","P","P"},
-            {"R","N","B","Q","K","B","N","R"}};
+            {"R","N","B","Q"," ","B","N","R"}};
 
     //used for monitoring position of Capitalized King,and monitors lowercase king (white or black respectively)
     //helpful for seeing if my moves puts king in check or not.
@@ -465,11 +465,42 @@ public class Alpha_Beta_Chess {
                 }
             }
 
+        //pawn - as long as King is not in top 2 rows (pawns can't move backwards, so don't check for that)
+        if(kingPositionC >= 16) {
+            try {
+                //checks diagonal upwards (left and right) positions
+                if ("p".equals(chessBoard[kingPositionC / 8 - 1][kingPositionC % 8 - 1])) {
+                    return false;
+                }
+            } catch (Exception e) {
+            }
+
+            try {
+                //checks diagonal downwards (left and right) positions
+                if ("p".equals(chessBoard[kingPositionC / 8 - 1][kingPositionC % 8 + 1])) {
+                    return false;
+                }
+            } catch (Exception e) {}
+        }
+
+        //king - checks if enemy king's attack radius within movement distance
+        for(int i=-1; i<=1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if(i!=0 || j!=0) {
+                    try {
+                        //checks if Knight in position 2 rows, 1 column away
+                        if ("k".equals(chessBoard[kingPositionC / 8 + i][kingPositionC % 8 + j])) {
+                            return false;
+                        }
+                    } catch (Exception e) {}
+                }
+            }
+        }
         return true;
     }
 }
 
 
 // https://www.youtube.com/watch?v=d_K0Jjy9BXM&index=14&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
-// King Safety (Part 2) - Java Chess Engine Tutorial 13 @ 4:44
+// King Safety (Part 2) - Java Chess Engine Tutorial 13 @ 13:09
 // Logic Crazy Chess
