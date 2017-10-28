@@ -20,14 +20,29 @@ public class Alpha_Beta_Chess {
             */
 
             //can manipulate these values to test possible positions
+            /*
+                0   1   2   3   4   5   6   7
+               --------------------------------
+            0 |" "|" "|" "|" "|" "|" "|" "|" "|  0
+            1 |" "|" "|" "|" "|" "|" "|" "|" "|  1
+            2 |" "|" "|" "|" "|" "|" "|" "|" "|  2
+            3 |" "|" "|" "|" "|" "|" "|" "|" "|  3
+            4 |" "|" "|" "|" "|" "|" "|" "|" "|  4
+            5 |" "|" "|" "|" "|" "|" "|" "|" "|  5
+            6 |" "|" "|" "|" "|" "|" "|" "|" "|  6
+            7 |" "|" "|" "|" "|" "|" "|" "|" "|  7
+               --------------------------------
+                0   1   2   3   4   5   6   7
+             */
+
             {"r","n","b","q","k","b","n","r"},
             {"p","p","p","p","p","p","p","p"},
             {" "," "," "," "," "," "," "," "},
-            {" "," "," "," "," "," ","b"," "},
             {" "," "," "," "," "," "," "," "},
-            {" "," "," "," ","K"," "," "," "},
+            {" "," "," "," "," "," "," "," "},
+            {" "," "," "," ","q"," "," "," "},
             {"P","P","P","P","P","P","P","P"},
-            {"R","N","B","Q"," ","B","N","R"}};
+            {"R","N","B","Q","K","B","N","R"}};
 
     //used for monitoring position of Capitalized King,and monitors lowercase king (white or black respectively)
     //helpful for seeing if my moves puts king in check or not.
@@ -90,7 +105,77 @@ public class Alpha_Beta_Chess {
 
     //possible moves for White Pawn
     public static String possibleP(int i){
-        String list = "";
+        String list = "", oldPiece;
+        int r = i/8, c = i%8;
+        for (int j=-1; j<=1; j+=2) {
+            try {//possible capture
+                if (Character.isLowerCase(chessBoard[r - 1][c + j].charAt(0)) && i >= 16) {
+                    oldPiece = chessBoard[r - 1][c + j];
+                    chessBoard[r][c] = " ";
+                    chessBoard[r - 1][c + j] = "P";
+
+                    if (kingSafe()) {
+                        list = list + r + c + (r - 1) + (c + j) + oldPiece;
+                    }
+
+                    chessBoard[r][c] = "P";
+                    chessBoard[r - 1][c + j] = oldPiece;
+                }
+            } catch (Exception e) {}
+
+            try {//promotion & capture
+                if (Character.isLowerCase(chessBoard[r - 1][c + j].charAt(0)) && i < 16) {
+                    String[] temp = {"Q", "R", "B", "N"};
+                    for (int k = 0; k < 4; k++) {
+                        oldPiece = chessBoard[r - 1][c + j];
+                        chessBoard[r][c] = " ";
+                        chessBoard[r - 1][c + j] = temp[k];
+                        if (kingSafe()) {
+                            //column1, column2, captured piece, new piece, P
+                            //don't need r because already know the row (1 to 0), end of board
+                            list = list + c + (c + j) + oldPiece + temp[k] + "P";
+                        }
+                        chessBoard[r][c] = "P";
+                        chessBoard[r - 1][c + j] = oldPiece;
+                    }
+                }
+
+            } catch (Exception e) {}
+        }
+        try {//move one up
+            if (" ".equals(chessBoard[r - 1][c].charAt(0)) && i >= 16) {
+                oldPiece = chessBoard[r - 1][c];
+                chessBoard[r][c] = " ";
+                chessBoard[r - 1][c] = "P";
+
+                if (kingSafe()) {
+                    list = list + r + c + (r - 1) + c + oldPiece;
+                }
+
+                chessBoard[r][c] = "P";
+                chessBoard[r - 1][c] = oldPiece;
+            }
+        } catch (Exception e){}
+
+        try {//promotion & no capture
+            if (" ".equals(chessBoard[r - 1][c].charAt(0)) && i < 16) {
+                String[] temp = {"Q", "R", "B", "N"};
+                for (int k = 0; k < 4; k++) {
+                    oldPiece = chessBoard[r - 1][c];
+                    chessBoard[r][c] = " ";
+                    chessBoard[r - 1][c] = temp[k];
+
+                    if (kingSafe()) {
+                        //column1, column2, captured piece, new piece, P
+                        //don't need r because already know the row (1 to 0), end of board
+                        list = list + c + oldPiece + temp[k] + "P";
+                    }
+                    chessBoard[r][c] = "P";
+                    chessBoard[r - 1][c] = oldPiece;
+                }
+            }
+        } catch (Exception e){}
+
         return list;
     }
     //possible moves for White Rook (could be similar to Bishop, but taking different approach)
@@ -501,6 +586,6 @@ public class Alpha_Beta_Chess {
 }
 
 
-// https://www.youtube.com/watch?v=d_K0Jjy9BXM&index=14&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
-// King Safety (Part 2) - Java Chess Engine Tutorial 13 @ 13:09
+// https://www.youtube.com/watch?v=h4nHxLC8pp4&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl&index=16
+// Pawn Movement (Part 2) - Java Chess Engine Tutorial 15 @ 5:17
 // Logic Crazy Chess
