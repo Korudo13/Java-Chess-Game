@@ -40,7 +40,7 @@ public class Alpha_Beta_Chess {
             {" "," "," "," "," "," "," "," "},
             {" "," "," "," "," "," "," "," "},
             {" "," "," "," "," "," "," "," "},
-            {" "," "," "," ","q"," "," "," "},
+            {" "," "," "," "," "," "," "," "},
             {"P","P","P","P","P","P","P","P"},
             {"R","N","B","Q","K","B","N","R"}};
 
@@ -143,7 +143,7 @@ public class Alpha_Beta_Chess {
             } catch (Exception e) {}
         }
         try {//move one up
-            if (" ".equals(chessBoard[r - 1][c].charAt(0)) && i >= 16) {
+            if (" ".equals(chessBoard[r - 1][c]) && i >= 16) {
                 oldPiece = chessBoard[r - 1][c];
                 chessBoard[r][c] = " ";
                 chessBoard[r - 1][c] = "P";
@@ -158,7 +158,7 @@ public class Alpha_Beta_Chess {
         } catch (Exception e){}
 
         try {//promotion & no capture
-            if (" ".equals(chessBoard[r - 1][c].charAt(0)) && i < 16) {
+            if (" ".equals(chessBoard[r - 1][c]) && i < 16) {
                 String[] temp = {"Q", "R", "B", "N"};
                 for (int k = 0; k < 4; k++) {
                     oldPiece = chessBoard[r - 1][c];
@@ -173,6 +173,22 @@ public class Alpha_Beta_Chess {
                     chessBoard[r][c] = "P";
                     chessBoard[r - 1][c] = oldPiece;
                 }
+            }
+        } catch (Exception e){}
+
+        try {//move two up
+            // 48 referring to the bottom two rows
+            if (" ".equals(chessBoard[r - 1][c]) && " ".equals(chessBoard[r - 2][c]) && i >= 48) {
+                oldPiece = chessBoard[r - 2][c];
+                chessBoard[r][c] = " ";
+                chessBoard[r - 2][c] = "P";
+
+                if (kingSafe()) {
+                    list = list + r + c + (r - 2) + c + oldPiece;
+                }
+
+                chessBoard[r][c] = "P";
+                chessBoard[r - 2][c] = oldPiece;
             }
         } catch (Exception e){}
 
@@ -587,5 +603,5 @@ public class Alpha_Beta_Chess {
 
 
 // https://www.youtube.com/watch?v=h4nHxLC8pp4&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl&index=16
-// Pawn Movement (Part 2) - Java Chess Engine Tutorial 15 @ 5:17
+// Pawn Movement (Part 2) - Java Chess Engine Tutorial 15 @ 7:22
 // Logic Crazy Chess
