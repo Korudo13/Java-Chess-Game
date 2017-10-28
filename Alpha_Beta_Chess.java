@@ -20,6 +20,7 @@ public class Alpha_Beta_Chess {
             */
 
             //can manipulate these values to test possible positions
+            //4 digit number. First and Second = coordinate for piece, Third and Fourth = coordinate for next possible move.
             /*
                 0   1   2   3   4   5   6   7
                --------------------------------
@@ -602,6 +603,6 @@ public class Alpha_Beta_Chess {
 }
 
 
-// https://www.youtube.com/watch?v=h4nHxLC8pp4&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl&index=16
-// Pawn Movement (Part 2) - Java Chess Engine Tutorial 15 @ 7:22
+// https://www.youtube.com/watch?v=ngO6j5FYdG8&index=17&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
+// Making and Undoing Moves - Java Chess Engine Tutorial 16 @ 0:00
 // Logic Crazy Chess
