@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.*;
 
 public class Alpha_Beta_Chess {
 
@@ -20,7 +21,7 @@ public class Alpha_Beta_Chess {
             */
 
             //can manipulate these values to test possible positions
-            //4 digit number. First and Second = coordinate for piece, Third and Fourth = coordinate for next possible move.
+            // x1, y1, x2, y2, captured piece
             /*
                 0   1   2   3   4   5   6   7
                --------------------------------
@@ -61,6 +62,42 @@ public class Alpha_Beta_Chess {
         f.setVisible(true);*/
 
         System.out.println(possibleMoves());
+        makeMove(("7655 "));
+        undoMove(("7655 "));
+
+        //for 8 lines, print out array in string notation
+        for (int i=0; i<8; i++){
+            System.out.println(Arrays.toString(chessBoard[i]));
+        }
+    }
+
+    public static void makeMove(String move){
+        if(move.charAt(4) != 'P'){
+            //x1, y1, x2, y2, captured piece
+            //0 and 1 are starting, 2 and 3 are destination
+            chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))] = chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))];
+            chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))] = " ";
+        }
+
+        else{
+            //if pawn promotion
+            //column1, column2, captured piece, new piece, P --> pawn promotion
+            chessBoard[1][Character.getNumericValue(move.charAt(0))] = " ";
+            chessBoard[0][Character.getNumericValue(move.charAt(1))] = String.valueOf(move.charAt(3));
+        }
+    }
+
+    public static void undoMove(String move){
+        if(move.charAt(4) != 'P'){
+            chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))] = chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))];
+            chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))] = String.valueOf(move.charAt(4));
+        }
+
+        else{
+            //undo pawn promotion
+            chessBoard[1][Character.getNumericValue(move.charAt(0))] = "P";
+            chessBoard[0][Character.getNumericValue(move.charAt(1))] = String.valueOf(move.charAt(2));
+        }
     }
 
 
@@ -132,7 +169,7 @@ public class Alpha_Beta_Chess {
                         chessBoard[r][c] = " ";
                         chessBoard[r - 1][c + j] = temp[k];
                         if (kingSafe()) {
-                            //column1, column2, captured piece, new piece, P
+                            //column1, column2, captured piece, new piece, P --> pawn promotion
                             //don't need r because already know the row (1 to 0), end of board
                             list = list + c + (c + j) + oldPiece + temp[k] + "P";
                         }
@@ -603,6 +640,6 @@ public class Alpha_Beta_Chess {
 }
 
 
-// https://www.youtube.com/watch?v=ngO6j5FYdG8&index=17&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
-// Making and Undoing Moves - Java Chess Engine Tutorial 16 @ 0:00
+// https://www.youtube.com/watch?v=fJ4uQpkn9V0&index=18&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
+// Minimax and Alpha-Beta Pruning - Java Chess Engine Tutorial 17
 // Logic Crazy Chess
