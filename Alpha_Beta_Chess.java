@@ -640,6 +640,9 @@ public class Alpha_Beta_Chess {
 }
 
 
-// https://www.youtube.com/watch?v=fJ4uQpkn9V0&index=18&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
-// Minimax and Alpha-Beta Pruning - Java Chess Engine Tutorial 17
+// https://www.youtube.com/watch?v=UZLnDvdeNo8&index=19&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
+// Alpha-Beta Algorithm (Part 1) - Java Chess Engine Tutorial 18
 // Logic Crazy Chess
+
+
+//Alpha-Beta Pruning / Mini-Max algorithm explanation: http://web.cs.ucla.edu/~rosen/161/notes/alphabeta.html
