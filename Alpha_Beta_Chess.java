@@ -72,7 +72,7 @@ public class Alpha_Beta_Chess {
     }
 
     public static String alphaBeta(int depth, int beta, int alpha, String move, int player){ //beta then alpha is really important for functionality
-        /*beta value, alpha value, and the chosen value between the two
+        /*alpha value, beta value, and the chosen value between the two
           - based on a tree with nodes, extension of minimax algorithm
 
          return score and move of optimal route
@@ -84,20 +84,30 @@ public class Alpha_Beta_Chess {
         if(depth == 0 || list.length() == 0) {
             return move + (rating() * (player * 2 - 1));
                 //turn 0 or 1 into -1 or 1.
-                    // (math behind this: value = 1 --> 1 * 2 = "2" --> 2 - 1 = "1" --> "value = 1")
-                    // or (math behind this: value = 0 --> 0 * 2 = "0" --> 2 - 1 = "-1" --> "value= -1")
+                    // (math behind this: player = 1 --> 1 * 2 = "2" --> 2 - 1 = "1" --> "player = 1")
+                    // or (math behind this: player = 0 --> 0 * 2 = "0" --> 2 - 1 = "-1" --> "player = -1")
         }
 
 
-        for (int i = 0; i < list.length(); i += 5){
-            list.substring(i, i +5)
+        for (int i=0; i < list.length(); i+=5){
+            makeMove(list.substring(i, i +5));
+            flipBoard();
+            //recursion: procedure that calls itself (snowball effect, like a loop)
+            String returnString = alphaBeta(depth-1, beta, alpha, list.substring(i, i +5), player);
         }
 
         //sorting method and rating method is paramount for excellent chess engines.
 
-        player = 1-player; //either 1 or 0.
+        player = 1 - player; //either 1 or 0.
 
         return ""; //--> returning empty string as a placeholder, used to detect errors as I write code (instead of being stuck on return statement)
+    }
+
+    //flips board upside down. Not the most efficient, but easier to debug.
+        //useful because player makes a move, board flips, make move for opponent, etc.
+            //***challenge: make a better way after I fully understand this.***
+    public static void flipBoard(){
+
     }
 
     public static void makeMove(String move){
@@ -521,7 +531,7 @@ public class Alpha_Beta_Chess {
         //int r = row, int c = column
         int r = i / 8, c = i % 8;
 
-        //King can move in 8 directions, possible positions are 0-8
+        //King can move in 8 directions, possible positions are 0-9
         for (int j=0; j<9; j++) {
 
             /*
@@ -674,7 +684,7 @@ public class Alpha_Beta_Chess {
 
 
 // https://www.youtube.com/watch?v=Wyh-5P5-7U8&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl&index=20
-// Alpha-Beta Algorithm (Part 2) - Java Chess Engine Tutorial 19
+// Alpha-Beta Algorithm (Part 2) - Java Chess Engine Tutorial 19 @ 3:53
 // Logic Crazy Chess
 
 
