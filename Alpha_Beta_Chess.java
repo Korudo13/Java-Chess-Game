@@ -71,6 +71,35 @@ public class Alpha_Beta_Chess {
         }
     }
 
+    public static String alphaBeta(int depth, int beta, int alpha, String move, int player){ //beta then alpha is really important for functionality
+        /*beta value, alpha value, and the chosen value between the two
+          - based on a tree with nodes, extension of minimax algorithm
+
+         return score and move of optimal route
+            - returns a string because it can be both the move (string) and the score (integer)
+                * return in the form of 1234b <----- move ######### <----score */
+
+        String list = possibleMoves();
+
+        if(depth == 0 || list.length() == 0) {
+            return move + (rating() * (player * 2 - 1));
+                //turn 0 or 1 into -1 or 1.
+                    // (math behind this: value = 1 --> 1 * 2 = "2" --> 2 - 1 = "1" --> "value = 1")
+                    // or (math behind this: value = 0 --> 0 * 2 = "0" --> 2 - 1 = "-1" --> "value= -1")
+        }
+
+
+        for (int i = 0; i < list.length(); i += 5){
+            list.substring(i, i +5)
+        }
+
+        //sorting method and rating method is paramount for excellent chess engines.
+
+        player = 1-player; //either 1 or 0.
+
+        return ""; //--> returning empty string as a placeholder, used to detect errors as I write code (instead of being stuck on return statement)
+    }
+
     public static void makeMove(String move){
         if(move.charAt(4) != 'P'){
             //x1, y1, x2, y2, captured piece
@@ -99,7 +128,6 @@ public class Alpha_Beta_Chess {
             chessBoard[0][Character.getNumericValue(move.charAt(1))] = String.valueOf(move.charAt(2));
         }
     }
-
 
 
     public static String possibleMoves(){
@@ -493,7 +521,7 @@ public class Alpha_Beta_Chess {
         //int r = row, int c = column
         int r = i / 8, c = i % 8;
 
-        //King can move in 8 directions, possible positions are 0-9
+        //King can move in 8 directions, possible positions are 0-8
         for (int j=0; j<9; j++) {
 
             /*
@@ -538,6 +566,11 @@ public class Alpha_Beta_Chess {
         //need to add castling later.
 
         return list;
+    }
+
+    //rating for Alpha-Beta Pruning algorithm
+    public static int rating(){
+        return 0;
     }
 
     //checks to see if my King is safe against specific enemy piece types
@@ -640,8 +673,8 @@ public class Alpha_Beta_Chess {
 }
 
 
-// https://www.youtube.com/watch?v=UZLnDvdeNo8&index=19&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl
-// Alpha-Beta Algorithm (Part 1) - Java Chess Engine Tutorial 18
+// https://www.youtube.com/watch?v=Wyh-5P5-7U8&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl&index=20
+// Alpha-Beta Algorithm (Part 2) - Java Chess Engine Tutorial 19
 // Logic Crazy Chess
 
 
