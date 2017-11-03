@@ -50,6 +50,8 @@ public class Alpha_Beta_Chess {
     //helpful for seeing if my moves puts king in check or not.
     static int kingPositionC, kingPositionL;
 
+    static int globalDepth = 4; //search to a depth of (4)
+
     public static void main(String[] args){
         while(!"K".equals(chessBoard[kingPositionC/8][kingPositionC%8])){kingPositionC++;} //get my King's location
         while(!"k".equals(chessBoard[kingPositionL/8][kingPositionL%8])){kingPositionL++;} //get enemy King's location
@@ -78,29 +80,40 @@ public class Alpha_Beta_Chess {
          return score and move of optimal route
             - returns a string because it can be both the move (string) and the score (integer)
                 * return in the form of 1234b <----- move ######### <----score */
-
         String list = possibleMoves();
-
         if(depth == 0 || list.length() == 0) {
-            return move + (rating() * (player * 2 - 1));
+            return move + (rating() * (player * 2 - 1));}
                 //turn 0 or 1 into -1 or 1.
                     // (math behind this: player = 1 --> 1 * 2 = "2" --> 2 - 1 = "1" --> "player = 1")
                     // or (math behind this: player = 0 --> 0 * 2 = "0" --> 2 - 1 = "-1" --> "player = -1")
-        }
 
-
+        player = 1 - player; //either 1 or 0.
         for (int i=0; i < list.length(); i+=5){
             makeMove(list.substring(i, i +5));
             flipBoard();
             //recursion: procedure that calls itself (snowball effect, like a loop)
             String returnString = alphaBeta(depth-1, beta, alpha, list.substring(i, i +5), player);
-        }
+            int value = Integer.valueOf(returnString.substring(5));
+            flipBoard(); //flipping the board right-side up for the remainder
+            undoMove(list.substring(i,i+5));
+            if (player==0){
+                if(value<= beta) {beta = value; if(depth == globalDepth) {move = returnString.substring(0,5);}}
+            }
+
+            else {
+                if(value > alpha) {alpha = value; if(depth == globalDepth) {move = returnString.substring(0,5);}}
+            }
+
+            if (alpha >= beta){
+                if(player == 0){return move + beta;} else {return move + alpha;}
+                }
+            }
+
+        if(player == 0){return move + beta;} else {return move + alpha;}
+
 
         //sorting method and rating method is paramount for excellent chess engines.
 
-        player = 1 - player; //either 1 or 0.
-
-        return ""; //--> returning empty string as a placeholder, used to detect errors as I write code (instead of being stuck on return statement)
     }
 
     //flips board upside down. Not the most efficient, but easier to debug.
@@ -683,8 +696,8 @@ public class Alpha_Beta_Chess {
 }
 
 
-// https://www.youtube.com/watch?v=Wyh-5P5-7U8&list=PLQV5mozTHmaffB0rBsD6m9VN1azgo5wXl&index=20
-// Alpha-Beta Algorithm (Part 2) - Java Chess Engine Tutorial 19 @ 3:53
+// https://www.youtube.com/watch?v=8xBjxYHVwxM
+// Verifying an Alpha-Beta Algorithm works Correctly - Java Chess Engine Tutorial 20
 // Logic Crazy Chess
 
 
