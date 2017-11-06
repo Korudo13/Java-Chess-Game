@@ -64,6 +64,7 @@ public class Alpha_Beta_Chess {
         f.setVisible(true);*/
 
         System.out.println(possibleMoves());
+        System.out.println(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
         makeMove(("7655 "));
         undoMove(("7655 "));
 
@@ -80,9 +81,18 @@ public class Alpha_Beta_Chess {
          return score and move of optimal route
             - returns a string because it can be both the move (string) and the score (integer)
                 * return in the form of 1234b <----- move ######### <----score */
-        String list = possibleMoves();
+        //String list = possibleMoves();
+        String list = "1";
         if(depth == 0 || list.length() == 0) {
             return move + (rating() * (player * 2 - 1));}
+        list = "";
+        System.out.print("How many moves are there: ");
+        Scanner sc = new Scanner(System.in);
+        int temp = sc.nextInt();
+
+        for (int i = 0; i < temp; i++){
+            list += "1111b";
+        }
                 //turn 0 or 1 into -1 or 1.
                     // (math behind this: player = 1 --> 1 * 2 = "2" --> 2 - 1 = "1" --> "player = 1")
                     // or (math behind this: player = 0 --> 0 * 2 = "0" --> 2 - 1 = "-1" --> "player = -1")
@@ -591,9 +601,13 @@ public class Alpha_Beta_Chess {
         return list;
     }
 
+
     //rating for Alpha-Beta Pruning algorithm
     public static int rating(){
-        return 0;
+       System.out.print("What is the score: ");
+       Scanner sc = new Scanner(System.in);
+       return sc.nextInt();
+       //return 0;
     }
 
     //checks to see if my King is safe against specific enemy piece types
@@ -697,7 +711,7 @@ public class Alpha_Beta_Chess {
 
 
 // https://www.youtube.com/watch?v=8xBjxYHVwxM
-// Verifying an Alpha-Beta Algorithm works Correctly - Java Chess Engine Tutorial 20
+// Verifying an Alpha-Beta Algorithm works Correctly - Java Chess Engine Tutorial 20 @ 15:48
 // Logic Crazy Chess
 
 
