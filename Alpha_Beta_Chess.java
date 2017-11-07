@@ -64,7 +64,7 @@ public class Alpha_Beta_Chess {
         f.setVisible(true);*/
 
         System.out.println(possibleMoves());
-       // System.out.println(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
+        //System.out.println(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
         makeMove(("7655 "));
         undoMove(("7655 "));
 
@@ -73,21 +73,21 @@ public class Alpha_Beta_Chess {
             System.out.println(Arrays.toString(chessBoard[i]));
         }
     }
-/*
+
     public static String alphaBeta(int depth, int beta, int alpha, String move, int player){ //beta then alpha is really important for functionality
         /*alpha value, beta value, and the chosen value between the two
           - based on a tree with nodes, extension of minimax algorithm
 
          return score and move of optimal route
             - returns a string because it can be both the move (string) and the score (integer)
-                * return in the form of 1234b <----- move ######### <----score
-        //String list = possibleMoves();
+                * return in the form of 1234b <----- move ######### <----score*/
+       // String list = possibleMoves();
         String list = "1";
         if(depth == 0 || list.length() == 0) {
             return move + (rating() * (player * 2 - 1));}
         list = "";
         System.out.print("How many moves are there: ");
-        //Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         int temp = sc.nextInt();
 
         for (int i = 0; i < temp; i++){
@@ -125,12 +125,34 @@ public class Alpha_Beta_Chess {
         //sorting method and rating method is paramount for excellent chess engines.
 
     }
-*/
+
     //flips board upside down. Not the most efficient, but easier to debug.
         //useful because player makes a move, board flips, make move for opponent, etc.
             //***challenge: make a better way after I fully understand this.***
     public static void flipBoard(){
+        String temp;
+        //loop through half of the board
+        for(int i=0; i<32; i++) {
+            int r = i / 8, c = i % 8;
+            if (Character.isUpperCase(chessBoard[r][c].charAt(0))) { //returns true or false
+                temp = chessBoard[r][c].toLowerCase();
+            } else {
+                temp = chessBoard[r][c].toUpperCase();
+            }
 
+            //checking piece 1 away from the edge of the board
+            if (Character.isUpperCase(chessBoard[7-r][7-c].charAt(0))) { //returns true or false
+                chessBoard[r][c] = chessBoard[7-r][7-c].toLowerCase();
+            } else {
+                chessBoard[r][c] = chessBoard[7-r][7-c].toUpperCase();
+            }
+
+            chessBoard[7-r][7-c] = temp;
+        }
+
+        int kingTemp = kingPositionC;
+        kingPositionC = 63-kingPositionL;
+        kingPositionL = 63-kingTemp;
     }
 
     public static void makeMove(String move){
@@ -601,7 +623,7 @@ public class Alpha_Beta_Chess {
         return list;
     }
 
-/*
+
     //rating for Alpha-Beta Pruning algorithm
     public static int rating(){
        System.out.print("What is the score: ");
@@ -609,7 +631,7 @@ public class Alpha_Beta_Chess {
        return sc.nextInt();
        //return 0;
     }
- */
+
 
     //checks to see if my King is safe against specific enemy piece types
     public static boolean kingSafe(){
@@ -711,8 +733,8 @@ public class Alpha_Beta_Chess {
 }
 
 
-// https://www.youtube.com/watch?v=8xBjxYHVwxM
-// Verifying an Alpha-Beta Algorithm works Correctly - Java Chess Engine Tutorial 20 @ 15:48
+// https://www.youtube.com/watch?v=tjsciMjqixA
+// Alternating Sides & Debugging - Java Chess Engine Tutorial 21 @ 13:00
 // Logic Crazy Chess
 
 
