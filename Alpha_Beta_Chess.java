@@ -1,7 +1,10 @@
-import javax.swing.*;
+//import javax.swing.*;
 import java.util.*;
 
 public class Alpha_Beta_Chess {
+
+    //fix the bug that prevents the enemy from moving
+
 
     //board representation, chose multidimensional array for easy visual representation (opposed to a bitboard)
     static String chessBoard[][] = {
@@ -64,7 +67,7 @@ public class Alpha_Beta_Chess {
         f.setVisible(true);*/
 
         System.out.println(possibleMoves());
-        //System.out.println(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
+        makeMove(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
         makeMove(("7655 "));
         undoMove(("7655 "));
 
@@ -81,21 +84,9 @@ public class Alpha_Beta_Chess {
          return score and move of optimal route
             - returns a string because it can be both the move (string) and the score (integer)
                 * return in the form of 1234b <----- move ######### <----score*/
-       // String list = possibleMoves();
-        String list = "1";
+        String list = possibleMoves();
         if(depth == 0 || list.length() == 0) {
             return move + (rating() * (player * 2 - 1));}
-        list = "";
-        System.out.print("How many moves are there: ");
-        Scanner sc = new Scanner(System.in);
-        int temp = sc.nextInt();
-
-        for (int i = 0; i < temp; i++){
-            list += "1111b";
-        }
-                //turn 0 or 1 into -1 or 1.
-                    // (math behind this: player = 1 --> 1 * 2 = "2" --> 2 - 1 = "1" --> "player = 1")
-                    // or (math behind this: player = 0 --> 0 * 2 = "0" --> 2 - 1 = "-1" --> "player = -1")
 
         player = 1 - player; //either 1 or 0.
         for (int i=0; i < list.length(); i+=5){
@@ -133,7 +124,7 @@ public class Alpha_Beta_Chess {
         String temp;
         //loop through half of the board
         for(int i=0; i<32; i++) {
-            int r = i / 8, c = i % 8;
+            int r=i/8, c=i%8;
             if (Character.isUpperCase(chessBoard[r][c].charAt(0))) { //returns true or false
                 temp = chessBoard[r][c].toLowerCase();
             } else {
@@ -150,17 +141,22 @@ public class Alpha_Beta_Chess {
             chessBoard[7-r][7-c] = temp;
         }
 
-        int kingTemp = kingPositionC;
-        kingPositionC = 63-kingPositionL;
-        kingPositionL = 63-kingTemp;
+       int kingTemp = kingPositionC;
+       kingPositionC = 63-kingPositionL;
+       kingPositionL = 63-kingTemp;
     }
 
     public static void makeMove(String move){
         if(move.charAt(4) != 'P'){
+
             //x1, y1, x2, y2, captured piece
             //0 and 1 are starting, 2 and 3 are destination
             chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))] = chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))];
             chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))] = " ";
+
+            if ("K".equals(chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))])) {
+                kingPositionC=8*Character.getNumericValue(move.charAt(2))+Character.getNumericValue(move.charAt(3));
+            }
         }
 
         else{
@@ -175,6 +171,11 @@ public class Alpha_Beta_Chess {
         if(move.charAt(4) != 'P'){
             chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))] = chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))];
             chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))] = String.valueOf(move.charAt(4));
+
+
+           if ("K".equals(chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))])) {
+                kingPositionC=8*Character.getNumericValue(move.charAt(0))+Character.getNumericValue(move.charAt(1));
+            }
         }
 
         else{
@@ -626,10 +627,10 @@ public class Alpha_Beta_Chess {
 
     //rating for Alpha-Beta Pruning algorithm
     public static int rating(){
-       System.out.print("What is the score: ");
+       /*System.out.print("What is the score: ");
        Scanner sc = new Scanner(System.in);
-       return sc.nextInt();
-       //return 0;
+       return sc.nextInt();*/
+       return 0;
     }
 
 
@@ -734,7 +735,7 @@ public class Alpha_Beta_Chess {
 
 
 // https://www.youtube.com/watch?v=tjsciMjqixA
-// Alternating Sides & Debugging - Java Chess Engine Tutorial 21 @ 13:00
+// Alternating Sides & Debugging - Java Chess Engine Tutorial 21
 // Logic Crazy Chess
 
 
